@@ -41,6 +41,7 @@ class MyDriver extends Homey.Driver {
     }
 
     onPairListDevices(data, callback) {
+        // request pincode
         this.discover().then(speakers => {
             this.log("Discovered speaker", speakers);
             callback(null, speakers);

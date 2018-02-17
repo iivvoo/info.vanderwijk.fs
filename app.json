@@ -21,8 +21,12 @@
                 "en": "FSAPI",
                 "nl": "FSAPI"
             },
-            "class": "speaker",
-            "capabilities": [ "onoff",  "volume_set" ],
+            "class": "amplifier",
+            "capabilities": [
+                "onoff",
+                "volume_set",
+                "volume_mute"
+            ],
             "pair": [
                 {
                     "id": "list_devices",
@@ -34,6 +38,21 @@
                 {
                     "id": "add_devices",
                     "template": "add_devices"
+                }
+            ],
+            "settings": [
+                {
+                    "id": "pin",
+                    "type": "number",
+                    "label": {
+                        "en": "Pin code",
+                        "nl": "Pincode"
+                    },
+                    "value": 1234,
+                    "attr": {
+                        "min": 0,
+                        "max": 9999
+                    }
                 }
             ]
         }

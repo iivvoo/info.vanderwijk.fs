@@ -9,9 +9,12 @@ class MyDevice extends Homey.Device {
         this.log('device init');
         this.log('name:', this.getName());
         this.log('class:', this.getClass());
+        this.log('data:', this.getData());
 
         // register a capability listener
         this.registerCapabilityListener('onoff', this.onCapabilityOnoff.bind(this))
+        this.registerCapabilityListener('volume_set', this.onCapabilityVolumeSet.bind(this))
+        this.registerCapabilityListener('volume_mute', this.onCapabilityVolumeMute.bind(this))
     }
 
     // this method is called when the Device is added
@@ -24,11 +27,32 @@ class MyDevice extends Homey.Device {
         this.log('device deleted');
     }
 
-    // this method is called when the Device has requested a state change (turned on or off)
+    onCapabilityVolumeSet( value, opts, callback ) {
+
+        // ... set value to real device
+        this.log("OnCapabilityVolumeSet", value, opts);
+
+        // Then, emit a callback ( err, result )
+        callback( null );
+
+        // or, return a Promise
+        return Promise.reject( new Error('Switching the device failed!') );
+    }
     onCapabilityOnoff( value, opts, callback ) {
 
         // ... set value to real device
         this.log("OnCapabilityOnoff", value, opts);
+
+        // Then, emit a callback ( err, result )
+        callback( null );
+
+        // or, return a Promise
+        return Promise.reject( new Error('Switching the device failed!') );
+    }
+    onCapabilityVolumeMute( value, opts, callback ) {
+
+        // ... set value to real device
+        this.log("OnCapabilityVolumeMute", value, opts);
 
         // Then, emit a callback ( err, result )
         callback( null );
