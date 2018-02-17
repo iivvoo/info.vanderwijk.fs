@@ -1,0 +1,41 @@
+{
+    "id": "info.vanderwijk.fs",
+    "sdk": 2,
+    "name": {
+        "en": "FSHomey"
+    },
+    "description": {
+        "en": "Support for Frontier Silicon based speaker sytems"
+    },
+    "category": "music",
+    "version": "1.0.0",
+    "compatibility": ">=1.5.0",
+    "author": {
+        "name": "Ivo van der Wijk",
+        "email": "fshomey@in.m3r.nl"
+    },
+    "drivers": [
+        {
+            "id": "frontier-silicon-speaker",
+            "name": {
+                "en": "FSAPI",
+                "nl": "FSAPI"
+            },
+            "class": "speaker",
+            "capabilities": [ "onoff",  "volume_set" ],
+            "pair": [
+                {
+                    "id": "list_devices",
+                    "template": "list_devices",
+                    "navigation": {
+                        "next": "add_devices"
+                    }
+                },
+                {
+                    "id": "add_devices",
+                    "template": "add_devices"
+                }
+            ]
+        }
+    ]
+}
