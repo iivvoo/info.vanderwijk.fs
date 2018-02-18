@@ -6,11 +6,11 @@ const xml2js = require('xml2js');
 
 /*
  * TODO:
- * - renegotiate session id
  * - on/off
  * - mode select
  * - radio preselect
  * - pin from settings
+ * - sync state (on/off, volume) from device (GET)
  * - rediscover is ip changes?
  */
 class MyDevice extends Homey.Device {
@@ -127,6 +127,7 @@ class MyDevice extends Homey.Device {
 
         // ... set value to real device
         this.log("OnCapabilityOnoff", value, opts);
+        this.invokeApi("SET/netRemote.sys.power", value? "1": "0");
 
         // Then, emit a callback ( err, result )
         callback( null );

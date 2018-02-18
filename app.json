@@ -14,6 +14,9 @@
         "name": "Ivo van der Wijk",
         "email": "fshomey@in.m3r.nl"
     },
+    "permissions": [
+        "homey:manager:api"
+    ],
     "drivers": [
         {
             "id": "frontier-silicon-speaker",
@@ -27,6 +30,31 @@
                 "volume_set",
                 "volume_mute"
             ],
+            "mobile": {
+                "components": [
+                    {
+                        "id": "toggle",
+                        "capabilities": [ "onoff" ],
+                        "options": {
+                            "showTitle": true
+                        }
+                    },
+                    {
+                        "id": "toggle",
+                        "capabilities": [ "volume_mute" ],
+                        "options": {
+                            "showTitle": true
+                        }
+                    },
+                    {
+                        "id": "slider",
+                        "capabilities": [ "volume_set" ],
+                        "options": {
+                            "showTitle": true
+                        }
+                    }
+                ]
+            },
             "pair": [
                 {
                     "id": "list_devices",
