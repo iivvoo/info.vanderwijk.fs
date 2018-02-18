@@ -4,6 +4,15 @@ const Homey = require('homey');
 const request = require('request-promise-native');
 const xml2js = require('xml2js');
 
+/*
+ * TODO:
+ * - renegotiate session id
+ * - on/off
+ * - mode select
+ * - radio preselect
+ * - pin from settings
+ * - rediscover is ip changes?
+ */
 class MyDevice extends Homey.Device {
 
     // this method is called when the Device is inited
@@ -19,26 +28,42 @@ class MyDevice extends Homey.Device {
         this.registerCapabilityListener('volume_mute', this.onCapabilityVolumeMute.bind(this))
 
         let data = this.getData();
-        let ip = data.ip;
+        this.ip = data.ip;
         this.pin = "1234";
+        this.sessionid = null;
 
-        request({
-            url: `http://${ip}/fsapi/CREATE_SESSION`,
-            qs: { pin: this.pin}
-        }).then(res => {
-            this.log("Create session result", res);
-            xml2js.parseString(res, (error, result) => {
-                if(error) {
-                    this.log("Error parsing session id", error);
-                    // reject
-                }
-                this.log("parsed", result);
-                this.sessionid = result.fsapiResponse.sessionId[0];
-                this.log("Session id", this.sessionid);
-            });
+        this.getSessionId().then(id => {
+            this.sessionid = id;
+        }).catch(error => {
+            this.log("Couldn't fetch session id", error);
         });
     }
 
+    getSessionId() {
+        return new Promise((resolve, reject) => {
+            let sessionid;
+
+            request({
+                url: `http://${this.ip}/fsapi/CREATE_SESSION`,
+                qs: { pin: this.pin}
+            }).then(res => {
+                this.log("Create session result", res);
+                xml2js.parseString(res, (error, result) => {
+                    if(error) {
+                        this.log("Error parsing session id", error);
+                        reject({"errro": "parse error", data: error});
+                    }
+                    this.log("parsed", result);
+                    sessionid = result.fsapiResponse.sessionId[0];
+                    this.log("Session id", sessionid);
+                    this.sessionid = sessionid;
+                    resolve(sessionid)
+                });
+            }).catch(error => {
+                reject({error: "api error", data: error});
+            });
+        });
+    }
     // this method is called when the Device is added
     onAdded() {
         this.log('device added');
@@ -49,19 +74,41 @@ class MyDevice extends Homey.Device {
         this.log('device deleted');
     }
 
-    invokeApi(operation, value) {
-        let data = this.getData();
-        let ip = data.ip;
+    invokeApi(operation, value, retry=true) {
+        return new Promise((resolve, reject) => {
+            let data = this.getData();
+            let ip = data.ip;
 
-        let url = `http://${ip}/fsapi/${operation}`;
+            let url = `http://${ip}/fsapi/${operation}`;
 
-        request({url: url, qs: {
-            pin: this.pin,
-            sid: this.sessionid,
-            value: value
-        }});
-
+            request({url: url, qs: {
+                pin: this.pin,
+                sid: this.sessionid,
+                value: value
+            }}).then(res => {
+                resolve();
+                this.log('CALL SUCCESS', res);
+            }).catch(err => {
+                if(err.statusCode == 404) {
+                    if(retry) {
+                        this.log("Posibly session problem, refreshing id");
+                        return this.getSessionId().then(sessionid => {
+                            return this.invokeApi(operation, value, false);                        
+                        });
+                    }
+                    else {
+                        this.log("Possibly session problem but not retrying");
+                        return reject({"error": "Unknown API error", data: err});
+                    }
+                } else if (err.statusCode == 403) {
+                    return reject({"error": "Incorrect PIN"})
+                }
+                this.log('CALL ERROR', err);
+                return reject({"error": "Unknown API error", data: err});
+            });
+        });
     }
+
     onCapabilityVolumeSet( value, opts, callback ) {
 
         let level = value * 20;
