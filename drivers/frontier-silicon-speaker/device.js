@@ -117,11 +117,7 @@ class MyDevice extends Homey.Device {
         // ... set value to real device
         this.log("OnCapabilityVolumeSet", value, opts);
 
-        // Then, emit a callback ( err, result )
-        callback( null );
-
-        // or, return a Promise
-        return Promise.reject( new Error('Switching the device failed!') );
+        return Promise.resolve();
     }
     onCapabilityOnoff( value, opts, callback ) {
 
@@ -129,22 +125,15 @@ class MyDevice extends Homey.Device {
         this.log("OnCapabilityOnoff", value, opts);
         this.invokeApi("SET/netRemote.sys.power", value? "1": "0");
 
-        // Then, emit a callback ( err, result )
-        callback( null );
-
-        // or, return a Promise
-        return Promise.reject( new Error('Switching the device failed!') );
+        return Promise.resolve();
     }
     onCapabilityVolumeMute( value, opts, callback ) {
 
         // ... set value to real device
         this.log("OnCapabilityVolumeMute", value, opts);
+        this.invokeApi("SET/netRemote.sys.audio.mute", value? "1": "0");
 
-        // Then, emit a callback ( err, result )
-        callback( null );
-
-        // or, return a Promise
-        return Promise.reject( new Error('Switching the device failed!') );
+        return Promise.resolve();
     }
 
 }
