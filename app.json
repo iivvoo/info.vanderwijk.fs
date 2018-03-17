@@ -97,7 +97,7 @@
                     {
                         "name": "device",
                         "type": "device",
-                        "filter": "drive_id=frontier-silicon-speaker"
+                        "filter": "driver_id=frontier-silicon-speaker"
                     }, {
                         "name": "preset",
                         "type": "number",
