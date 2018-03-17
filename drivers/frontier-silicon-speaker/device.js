@@ -32,6 +32,7 @@ class MyDevice extends Homey.Device {
         let selectPreset = new Homey.FlowCardAction('preset_select');
         selectPreset.register().registerRunListener(( args, state ) => {
             // let isStopped = rain.stop(); // true or false
+            this.log("preset_select args", args.preset);
             return Promise.resolve( true );
         });
 
