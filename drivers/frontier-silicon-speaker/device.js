@@ -31,9 +31,16 @@ class MyDevice extends Homey.Device {
 
         let selectPreset = new Homey.FlowCardAction('preset_select');
         selectPreset.register().registerRunListener(( args, state ) => {
-            // let isStopped = rain.stop(); // true or false
-            this.log("preset_select args", args.preset);
-            return Promise.resolve( true );
+            let preset = (args.preset -1).toString();
+            return this.invokeApi("SET/netRemote.nav.action.selectPreset", preset);
+        });
+        let deviceOn = new Homey.FlowCardAction('device_on');
+        deviceOn.register().registerRunListener(( args, state ) => {
+            return this.invokeApi("SET/netRemote.sys.power", "1");
+        });
+        let deviceOff = new Homey.FlowCardAction('device_off');
+        deviceOff.register().registerRunListener(( args, state ) => {
+            return this.invokeApi("SET/netRemote.sys.power", "0");
         });
 
         let data = this.getData();

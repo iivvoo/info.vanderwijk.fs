@@ -107,8 +107,36 @@
                             "en": "Preset",
                             "nl": "Preset"
                         }
-                }
-            ]
+                    }
+                ]
+            },
+            { 
+                "id": "device_on",
+                "title": {
+                    "en": "Turn device on",
+                    "nl": "Turn device on"
+                },
+                "args": [
+                    {
+                        "name": "device",
+                        "type": "device",
+                        "filter": "driver_id=frontier-silicon-speaker"
+                    }
+                ]
+            },
+            { 
+                "id": "device_off",
+                "title": {
+                    "en": "Turn device off",
+                    "nl": "Turn device off"
+                },
+                "args": [
+                    {
+                        "name": "device",
+                        "type": "device",
+                        "filter": "driver_id=frontier-silicon-speaker"
+                    }
+                ]
             }
         ]
     }
