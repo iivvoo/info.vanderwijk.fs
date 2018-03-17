@@ -17,6 +17,7 @@ class MyDevice extends Homey.Device {
 
     // this method is called when the Device is inited
     onInit() {
+
         this.log('device init');
         this.log('name:', this.getName());
         this.log('class:', this.getClass());
@@ -26,6 +27,13 @@ class MyDevice extends Homey.Device {
         this.registerCapabilityListener('onoff', this.onCapabilityOnoff.bind(this))
         this.registerCapabilityListener('volume_set', this.onCapabilityVolumeSet.bind(this))
         this.registerCapabilityListener('volume_mute', this.onCapabilityVolumeMute.bind(this))
+        this.registerCapabilityListener('mode_select', this.onCapabilityModeSelect.bind(this))
+
+        let selectPreset = new Homey.FlowCardAction('preset_select');
+        selectPreset.register().registerRunListener(( args, state ) => {
+            // let isStopped = rain.stop(); // true or false
+            return Promise.resolve( true );
+        });
 
         let data = this.getData();
         this.ip = data.ip;
@@ -132,6 +140,14 @@ class MyDevice extends Homey.Device {
         // ... set value to real device
         this.log("OnCapabilityVolumeMute", value, opts);
         this.invokeApi("SET/netRemote.sys.audio.mute", value? "1": "0");
+
+        return Promise.resolve();
+    }
+    onCapabilityModeSelect( value, opts, callback ) {
+
+        // ... set value to real device
+        this.log("OnCapabilityModeSelect", value, opts);
+        // this.invokeApi("SET/netRemote.sys.audio.mute", value? "1": "0");
 
         return Promise.resolve();
     }
