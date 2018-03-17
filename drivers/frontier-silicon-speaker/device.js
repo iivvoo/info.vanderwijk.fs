@@ -27,7 +27,7 @@ class MyDevice extends Homey.Device {
         this.registerCapabilityListener('onoff', this.onCapabilityOnoff.bind(this))
         this.registerCapabilityListener('volume_set', this.onCapabilityVolumeSet.bind(this))
         this.registerCapabilityListener('volume_mute', this.onCapabilityVolumeMute.bind(this))
-        this.registerCapabilityListener('mode_select', this.onCapabilityModeSelect.bind(this))
+        // this.registerCapabilityListener('mode_select', this.onCapabilityModeSelect.bind(this))
 
         let selectPreset = new Homey.FlowCardAction('preset_select');
         selectPreset.register().registerRunListener(( args, state ) => {

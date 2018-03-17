@@ -17,27 +17,6 @@
     "permissions": [
         "homey:manager:api"
     ],
-    "capabilities": {
-        "mode_select": {
-            "type": "enum",
-            "title": {
-                "en": "Mode",
-                "nl": "Mode"
-            },
-            "getable": false,
-            "setable": true,
-            "values": [
-                {"id": "0", "title": { "en": "preset 0", "nl": "preset 0"}},
-                {"id": "1", "title": { "en": "preset 1", "nl": "preset 1"}},
-                {"id": "2", "title": { "en": "preset 2", "nl": "preset 2"}},
-                {"id": "3", "title": { "en": "preset 3", "nl": "preset 3"}},
-                {"id": "4", "title": { "en": "preset 4", "nl": "preset 4"}},
-                {"id": "5", "title": { "en": "preset 5", "nl": "preset 5"}},
-                {"id": "6", "title": { "en": "preset 6", "nl": "preset 6"}},
-                {"id": "7", "title": { "en": "preset 7", "nl": "preset 7"}}
-            ]
-        }
-    },
     "drivers": [
         {
             "id": "frontier-silicon-speaker",
@@ -49,8 +28,7 @@
             "capabilities": [
                 "onoff",
                 "volume_mute",
-                "volume_set",
-                "mode_select"
+                "volume_set"
             ],
             "mobile": {
                 "components": [
@@ -71,13 +49,6 @@
                     {
                         "id": "slider",
                         "capabilities": [ "volume_set" ],
-                        "options": {
-                            "showTitle": true
-                        }
-                    },
-                    {
-                        "id": "picker",
-                        "capabilities": [ "mode_select" ],
                         "options": {
                             "showTitle": true
                         }
@@ -117,23 +88,6 @@
     "flow": {
         "actions": [
             { 
-                "id": "mode_select",
-                "title": {
-                    "en": "Select mode",
-                    "nl": "Select mode"
-                },
-                "args": [
-                    {
-                        "name": "device",
-                        "type": "device",
-                        "filter": {
-                            "driver_id" :"frontier-silicon-speaker",
-                            "capabilities": "mode_select"
-                        }
-                    }
-                ]
-            },
-            { 
                 "id": "preset_select",
                 "title": {
                     "en": "Select preset",
@@ -143,10 +97,7 @@
                     {
                         "name": "device",
                         "type": "device",
-                        "placeholder": {
-                            "en": "Select speaker ",
-                            "nl": "Selecteer speaker"
-                        }
+                        "filter": "drive_id=frontier-silicon-speaker"
                     }, {
                         "name": "preset",
                         "type": "number",
